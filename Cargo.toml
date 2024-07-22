@@ -1,0 +1,21 @@
+[package]
+name = "chipmate"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# Emulation
+rand = "0.8.5"
+
+# Rendering
+macroquad = "0.4.4"
+
+# UI
+egui-macroquad = { git = "https://github.com/gold-silver-copper/egui-macroquad/" }
+egui_memory_editor = "0.2.9"
+rfd = "0.14.1"
+
+# For convenience
+thiserror = "1.0.63"
+log = "0.4.22"
+env_logger = "0.11.3"
