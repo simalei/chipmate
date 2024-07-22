@@ -9,7 +9,14 @@ Download binaries from [Releases](https://github.com/simalei/chipmate/releases) 
 
 **Other platforms**
 
-Run `cargo install chipmate`
+```
+git clone https://github.com/simalei/chipmate
+cd chipmate
+cargo run --release
+```
+
+Executable will be available in `target/release`
+
 
 # Features 
 * Decent emulation of CHIP-8
