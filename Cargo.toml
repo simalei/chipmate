@@ -16,7 +16,7 @@ rand = "0.8.5"
 macroquad = "0.4.4"
 
 # UI
-egui-macroquad = { git = "https://github.com/gold-silver-copper/egui-macroquad/" }
+egui-macroquad = { version = "0.16.1", git = "https://github.com/gold-silver-copper/egui-macroquad/" }
 egui_memory_editor = "0.2.9"
 rfd = "0.14.1"
 
