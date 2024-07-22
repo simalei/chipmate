@@ -7,7 +7,7 @@ use macroquad::prelude::*;
 use crate::chip8::Chip8;
 use crate::ui::Ui;
 
-#[macroquad::main("CHIP8 Emulator")]
+#[macroquad::main("chipmate")]
 async fn main() {
     env_logger::builder()
         .filter_level(LevelFilter::Debug)
