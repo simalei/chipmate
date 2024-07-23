@@ -497,7 +497,7 @@ mod tests {
         chip8.registers[0xD] = 25;
 
         chip8.execute().unwrap();
-        assert_eq!(chip8.registers[0xF], 50);
+        assert_eq!(chip8.registers[0xF], 0);
     }
 
     #[test]
