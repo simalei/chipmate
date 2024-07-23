@@ -447,6 +447,10 @@ impl Chip8 {
     }
 
     pub(crate) fn cycle(&mut self) -> Chip8Result<()> {
+        if self.pc >= 0xFFF {
+            self.pc = 0x200;
+        }
+
         let hi_byte = self.memory[self.pc as usize] as u16;
         let lo_byte = self.memory[(self.pc + 1) as usize] as u16;
         self.opcode = (hi_byte << 8) | lo_byte;
