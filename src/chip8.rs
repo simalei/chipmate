@@ -250,15 +250,17 @@ impl Chip8 {
                 self.registers[vx] = result;
                 self.registers[0xF] = if !borrow { 1 } else { 0 };
             }
-            (8, _, _, 6) => {
+            (8, _, _, 6) => { // 8XY6
                 let vx: usize = digit2 as usize;
                 let vy: usize = digit3 as usize;
 
+                let mut input = self.registers[vy];
                 if self.shift_quirk {
-                    self.registers[vy] = self.registers[vx];
+                    input = self.registers[vx];
                 }
-                let lsb = self.registers[vx] & 1;
-                self.registers[vx] >>= 1;
+                let lsb = input & 1;
+                input >>= 1;
+                self.registers[vx] = input;
                 self.registers[0xF] = lsb;
             }
             (8, _, _, 7) => { // 8XY7
@@ -270,15 +272,17 @@ impl Chip8 {
                 self.registers[vx] = result;
                 self.registers[0xF] = if !borrow { 1 } else { 0 };
             }
-            (8, _, _, 0xE) => {
+            (8, _, _, 0xE) => { // 8XYE
                 let vx: usize = digit2 as usize;
                 let vy: usize = digit3 as usize;
 
+                let mut input = self.registers[vy];
                 if self.shift_quirk {
-                    self.registers[vy] = self.registers[vx];
+                    input = self.registers[vx];
                 }
-                let msb = (self.registers[vx] >> 7) & 1;
-                self.registers[vx] <<= 1;
+                let msb = (input >> 7) & 1;
+                input <<= 1;
+                self.registers[vx] = input;
                 self.registers[0xF] = msb;
 
             }
