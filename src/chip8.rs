@@ -197,13 +197,13 @@ impl Chip8 {
                 }
             }
             (6, _, _, _) => {
-                let vx: usize = ((self.opcode & 0x0F00) >> 8usize) as usize;
+                let vx: usize = digit2 as usize;
                 let nn = self.opcode & 0x00FF;
 
                 self.registers[vx] = nn as u8;
             }
             (7, _, _, _) => {
-                let vx: usize = ((self.opcode & 0x0F00) >> 8usize) as usize;
+                let vx: usize = digit2 as usize;
                 let nn = self.opcode & 0x00FF;
 
                 self.registers[vx] = (self.registers[vx] as u16 + nn) as u8;
@@ -235,28 +235,20 @@ impl Chip8 {
             (8, _, _, 4) => { // 8XY4
                 let vx: usize = digit2 as usize;
                 let vy: usize = digit3 as usize;
-                let res = self.registers[vx].overflowing_add(self.registers[vy]);
 
-                if res.1 {
-                    self.registers[0xF] = 1;
-                } else {
-                    self.registers[0xF] = 0;
-                }
+                let (result, overflow) = self.registers[vx].overflowing_add(self.registers[vy]);
 
-                self.registers[vx] = res.0;
+                self.registers[vx] = result;
+                self.registers[0xF] = if overflow { 1 } else { 0 };
             }
             (8, _, _, 5) => { // 8XY5
                 let vx: usize = digit2 as usize;
                 let vy: usize = digit3 as usize;
-                let res = self.registers[vx].overflowing_sub(self.registers[vy]);
 
-                if res.1 || self.registers[vy] > self.registers[vx] {
-                    self.registers[0xF] = 1;
-                } else {
-                    self.registers[0xF] = 0;
-                }
+                let (result, borrow) = self.registers[vx].overflowing_sub(self.registers[vy]);
 
-                self.registers[vx] = res.0;
+                self.registers[vx] = result;
+                self.registers[0xF] = if !borrow { 1 } else { 0 };
             }
             (8, _, _, 6) => {
                 let vx: usize = digit2 as usize;
@@ -273,15 +265,10 @@ impl Chip8 {
                 let vx: usize = digit2 as usize;
                 let vy: usize = digit3 as usize;
 
-                let res = self.registers[vy].overflowing_sub(self.registers[vx]);
+                let (result, borrow) = self.registers[vy].overflowing_sub(self.registers[vx]);
 
-                if res.1 {
-                    self.registers[0xF] = 1;
-                } else {
-                    self.registers[0xF] = 0;
-                }
-
-                self.registers[vx] = res.0;
+                self.registers[vx] = result;
+                self.registers[0xF] = if !borrow { 1 } else { 0 };
             }
             (8, _, _, 0xE) => {
                 let vx: usize = digit2 as usize;
@@ -315,7 +302,7 @@ impl Chip8 {
                 self.pc = self.registers[0] as u16 + nnn;
             }
             (0xC, _, _, _) => {
-                let vx: usize = ((self.opcode & 0x0F00) >> 8usize) as usize;
+                let vx: usize = digit2 as usize;
                 let byte = self.opcode & 0x00FF;
 
                 self.registers[vx] = random::<u8>() & byte as u8;
@@ -350,7 +337,7 @@ impl Chip8 {
                 }
             }
             (0xE, _, 9, 0xE) => {
-                let vx: usize = ((self.opcode & 0x0F00) >> 8usize) as usize;
+                let vx: usize = digit2 as usize;
                 let key = self.registers[vx] as usize;
 
                 if self.keypad[key] {
@@ -358,7 +345,7 @@ impl Chip8 {
                 }
             }
             (0xE, _, 0xA, 1) => {
-                let vx: usize = ((self.opcode & 0x0F00) >> 8usize) as usize;
+                let vx: usize = digit2 as usize;
                 let key = self.registers[vx] as usize;
 
                 if !self.keypad[key] {
@@ -366,7 +353,7 @@ impl Chip8 {
                 }
             }
             (0xF, _, 0, 7) => {
-                let vx: usize = ((self.opcode & 0x0F00) >> 8usize) as usize;
+                let vx: usize = digit2 as usize;
 
                 self.registers[vx] = self.delay_timer;
             }
@@ -410,22 +397,22 @@ impl Chip8 {
                 }
             }
             (0xF, _, 1, 5) => {
-                let vx: usize = ((self.opcode & 0x0F00) >> 8usize) as usize;
+                let vx: usize = digit2 as usize;
 
                 self.delay_timer = self.registers[vx];
             }
             (0xF, _, 1, 8) => {
-                let vx: usize = ((self.opcode & 0x0F00) >> 8usize) as usize;
+                let vx: usize = digit2 as usize;
 
                 self.sound_timer = self.registers[vx];
             }
             (0xF, _, 1, 0xE) => {
-                let vx: usize = ((self.opcode & 0x0F00) >> 8usize) as usize;
+                let vx: usize = digit2 as usize;
 
                 self.index += self.registers[vx] as u16;
             }
             (0xF, _, 2, 9) => {
-                let vx: usize = ((self.opcode & 0x0F00) >> 8usize) as usize;
+                let vx: usize = digit2 as usize;
                 let digit = self.registers[vx];
 
                 self.index = FONTSET_START_ADDRESS as u16 + (5 * digit as u16);
